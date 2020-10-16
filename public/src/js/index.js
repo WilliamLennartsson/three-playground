@@ -6,7 +6,8 @@ import { loadModels, prepModelsAndAnimations } from './loaders/loaders.js'
 import MouseControlManager from './controls/mouseControls.js'
 import KeyboardInputManager from './controls/keyboardInputManager.js'
 
-import Player from './componentSystem/player.js'
+import Ground from './componentSystem/components/ground.js'
+import Player from './componentSystem/components/player.js'
 import GameObjectManager from './componentSystem/gameObjectManager.js'
 
 const loadingElem = document.querySelector('#loading')
@@ -31,10 +32,13 @@ function init() {
     console.log('Loaded and prepped models :>> ', models);
 
     // Create new gameObject
-    const gameObject = gameObjectManager.createGameObject(scene, 'Player')
-    gameObject.addComponent(Player, models.fox)
+    const player = gameObjectManager.createGameObject(scene, 'Player')
+    player.addComponent(Player, models.fox, keyboardInputManager)
 
-    console.log("GameObject: ", gameObject)
+    const ground = gameObjectManager.createGameObject(scene, 'Ground')
+    ground.addComponent(Ground, 1000, 1000)
+    console.log(player)
+    console.log(ground)
 
     // playNextAction(fox.mixerInfo)
     // playNextAction(fox.mixerInfo)
