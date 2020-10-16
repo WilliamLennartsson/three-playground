@@ -17,7 +17,8 @@ function init() {
     setUp()
     // loadFox()
     const models = prepModelsAndAnimations()
-    fox = spawnModel(scene, models["fox"], 0, -20, 0)
+    fox = spawnModel(scene, models["fox"], 0, 0, 0)
+    
     playNextAction(fox.mixerInfo)
     // playNextAction(fox.mixerInfo)
 
@@ -69,7 +70,7 @@ function setUp(){
   const near = 0.1
   const far = 100
   camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
-  camera.position.set(0, 20, 40);
+  camera.position.set(0, 10, 40);
 
   // Renderer
   const canvas = document.getElementById('3DScreen');
