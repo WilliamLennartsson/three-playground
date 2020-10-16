@@ -2,21 +2,19 @@ import * as THREE from '../dependencies/three.module.js'
 import { GLTFLoader } from '../dependencies/GLTFLoader.js'
 
 import { loadModels, prepModelsAndAnimations } from './loaders/loaders.js'
-import { spawnModel } from './spawners.js'
-import { createCube } from './cube.js'
-import mouseControls from './controls/mouseControls.js'
+
+import MouseControlManager from './controls/mouseControls.js'
+import KeyboardInputManager from './controls/keyboardInputManager.js'
 
 import Player from './componentSystem/player.js'
-import GameObject from './componentSystem/gameObject.js'
 import GameObjectManager from './componentSystem/gameObjectManager.js'
-
 
 const loadingElem = document.querySelector('#loading')
 
-let scene, camera, renderer, clock, controls
+let scene, camera, renderer, clock, mouseControls
 let fox
 
-let gameObjectManager
+let gameObjectManager, keyboardInputManager
 
 const globals = {
   time: 0,
@@ -27,24 +25,19 @@ function init() {
     
     loadingElem.style.display = 'none'
     setUp()
-
-    gameObjectManager = new GameObjectManager() 
     
     // loadFox()
     const models = prepModelsAndAnimations()
-    console.log('models :>> ', models);
+    console.log('Loaded and prepped models :>> ', models);
+
+    // Create new gameObject
     const gameObject = gameObjectManager.createGameObject(scene, 'Player')
     gameObject.addComponent(Player, models.fox)
 
+    console.log("GameObject: ", gameObject)
 
-    // fox = spawnModel(scene, models["fox"], 0, 0, 0)
-    
-    
     // playNextAction(fox.mixerInfo)
     // playNextAction(fox.mixerInfo)
-
-    // console.log('models :>> ', models)
-
     update();
 }
 
@@ -80,7 +73,9 @@ function playNextAction(mixerInfo) {
   }
 
 function setUp(){
+  // Clock
   clock = new THREE.Clock()
+
   // Scene 
   scene = new THREE.Scene()
   scene.background = new THREE.Color(0x222222)
@@ -105,37 +100,21 @@ function setUp(){
   scene.add(light)
 
   // Controls
-  controls = mouseControls(scene, camera)
+  mouseControls = new MouseControlManager(scene, camera)
+  keyboardInputManager = new KeyboardInputManager()
+
+  // GameObjectManager
+  gameObjectManager = new GameObjectManager() 
 
   window.onresize = () => { resizeScreen(renderer)}
 }
 
 function resizeScreen(renderer) {
-    renderer.setSize(window.innerWidth, window.innerHeight)
-
-    console.log("HALLÅÅ!?")
-    const canvas = renderer.domElement;
-    camera.aspect = canvas.clientWidth / canvas.clientHeight;
-    camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight)
+  const canvas = renderer.domElement;
+  camera.aspect = canvas.clientWidth / canvas.clientHeight;
+  camera.updateProjectionMatrix();
 }
-
-// function resizeRendererToDisplaySize(renderer) {
-  
-//   const canvas = renderer.domElement
-//   const width = canvas.clientWidth
-//   const height = canvas.clientHeight
-//   const needResize = canvas.width !== width || canvas.height !== height
-//   // console.log(width, canvas.width)
-//   if (canvas.width !== canvas.clientWidth) {
-//     console.log("NU!")
-//   }
-//   if (needResize) {
-//     renderer.setSize(width, height, false)
-//     console.log("Resized")
-//   }
-//   return needResize
-// }
-
 
 window.onload = function () {
     loadModels(init)
