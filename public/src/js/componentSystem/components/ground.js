@@ -8,8 +8,6 @@ export default class Ground extends Component {
     var material = new THREE.MeshBasicMaterial( {color: 0x228B22, side: THREE.DoubleSide} )
     var plane = new THREE.Mesh( geometry, material )
     plane.rotation.x = Math.PI / 2
-    console.log("plane", plane)
     gameObject.transform.add(plane)
-    console.log("Ground gameobject", gameObject.transform)
   }
 }
