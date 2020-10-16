@@ -1,28 +1,49 @@
 import * as THREE from '../dependencies/three.module.js'
 import { GLTFLoader } from '../dependencies/GLTFLoader.js'
 
-import { loadModels, prepModelsAndAnimations } from './loaders.js'
+import { loadModels, prepModelsAndAnimations } from './loaders/loaders.js'
 import { spawnModel } from './spawners.js'
 import { createCube } from './cube.js'
 import mouseControls from './controls/mouseControls.js'
+
+import Player from './componentSystem/player.js'
+import GameObject from './componentSystem/gameObject.js'
+import GameObjectManager from './componentSystem/gameObjectManager.js'
+
 
 const loadingElem = document.querySelector('#loading')
 
 let scene, camera, renderer, clock, controls
 let fox
 
+let gameObjectManager
+
+const globals = {
+  time: 0,
+  deltaTime: 0,
+};
+
 function init() {
     
     loadingElem.style.display = 'none'
     setUp()
+
+    gameObjectManager = new GameObjectManager() 
+    
     // loadFox()
     const models = prepModelsAndAnimations()
-    fox = spawnModel(scene, models["fox"], 0, 0, 0)
+    console.log('models :>> ', models);
+    const gameObject = gameObjectManager.createGameObject(scene, 'Player')
+    gameObject.addComponent(Player, models.fox)
+
+
+    // fox = spawnModel(scene, models["fox"], 0, 0, 0)
     
-    playNextAction(fox.mixerInfo)
+    
+    // playNextAction(fox.mixerInfo)
     // playNextAction(fox.mixerInfo)
 
-    console.log('models :>> ', models)
+    // console.log('models :>> ', models)
 
     update();
 }
@@ -34,9 +55,9 @@ const update = function () {
 
     const delta = clock.getDelta()
     
-    fox.mixerInfo.mixer.update(delta)
+    // if (fox) fox.mixerInfo.mixer.update(delta)
 
-
+    gameObjectManager.update(delta)
 
     // Zoom out effect
     // camera.position.z += 0.04

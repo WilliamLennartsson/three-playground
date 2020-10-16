@@ -1,6 +1,6 @@
 
 
-import { GLTFLoader } from '../dependencies/GLTFLoader.js'
+import { GLTFLoader } from '../../dependencies/GLTFLoader.js'
 import loadingManager from './loadingManager.js'
 
 const models = {
@@ -13,13 +13,15 @@ const gltfLoader = new GLTFLoader(loadingManager.manager)
 
 export function prepModelsAndAnimations() {
     Object.values(models).forEach(model => {
-      const animsByName = {}; 
+      console.log('------->:', model.url)
+      const animsByName = {} 
       // TODO: Does it crash if model doenst have animation?
       model.gltf.animations.forEach((clip) => {
-        animsByName[clip.name] = clip;
-      });
-      model.animations = animsByName;
-    });
+        animsByName[clip.name] = clip
+        console.log('  ', clip.name)
+      })
+      model.animations = animsByName
+    })
     return models
   }
 
@@ -28,8 +30,8 @@ export function loadModels(init) {
 
     for (const model of Object.values(models)) {
         gltfLoader.load(model.url, (gltf) => {
-          model.gltf = gltf;
-        });
+          model.gltf = gltf
+        })
       }
 }
 

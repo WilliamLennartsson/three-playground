@@ -1,5 +1,5 @@
 
-import * as THREE from '../dependencies/three.module.js'
+import * as THREE from '../../dependencies/three.module.js'
 
 const manager = new THREE.LoadingManager();
 
