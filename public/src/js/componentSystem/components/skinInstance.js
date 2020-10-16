@@ -15,7 +15,6 @@ export default class SkinInstance extends Component {
     let clip
     if (!animName) clip = this.model.animations[Object.keys(this.model.animations)[0]]
     else clip = this.model.animations[animName]
-    console.log('clip!!!!!!!!! :>> ', clip)
     // turn off all current actions
     for (const action of Object.values(this.actions)) {
       action.enabled = false
