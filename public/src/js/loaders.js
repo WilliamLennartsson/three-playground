@@ -1,26 +1,54 @@
 
-import * as THREE from '../dependencies/three.module.js'
 
-const loader = new THREE.ObjectLoader();
+import { GLTFLoader } from '../dependencies/GLTFLoader.js'
+import loadingManager from './loadingManager.js'
 
-
-export const loadTree = (scene) => {
-    loader.load(
-        "../models/tree.json",
-
-        function (obj) {
-            // Add the loaded object to the scene
-            scene.add(obj);
-        },
-
-        // onProgress callback
-        function (xhr) {
-            console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-        },
-
-        // onError callback
-        function (err) {
-            console.error('An error happened');
-        }
-    )
+const models = {
+    fox: { url: '../src/models/FoxModel/Fox.gltf' }
 }
+
+const gltfLoader = new GLTFLoader(loadingManager.manager)
+// const dataPath = '../src/models/FoxModel/Fox.gltf'
+
+
+export function prepModelsAndAnimations() {
+    Object.values(models).forEach(model => {
+      const animsByName = {}; 
+      // TODO: Does it crash if model doenst have animation?
+      model.gltf.animations.forEach((clip) => {
+        animsByName[clip.name] = clip;
+      });
+      model.animations = animsByName;
+    });
+    return models
+  }
+
+export function loadModels(init) {
+    loadingManager.events(init)
+
+    for (const model of Object.values(models)) {
+        gltfLoader.load(model.url, (gltf) => {
+          model.gltf = gltf;
+        });
+      }
+}
+
+// export function loadFox() {
+//     gltfLoader.load(dataPath, function (gltf) {
+//         const gltfFox = gltf
+//         const fox = gltf.scene.children[0]
+//         fox.material = new THREE.MeshLambertMaterial()
+//         fox.scale.set(4, 4, 4)
+//         fox.position.z = 300
+    
+//         fox.rotation.y = 45
+//         scene.add(gltf.scene)
+//         console.log('gltf', gltf)
+//         // Animation
+//         mixer = new THREE.AnimationMixer(gltf.scene);
+//         console.log("DOne loading model")
+//     }, undefined, function (error) {
+//         console.error(error)
+//     })
+// }
+
