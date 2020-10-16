@@ -4,7 +4,8 @@ import { GLTFLoader } from '../../dependencies/GLTFLoader.js'
 import loadingManager from './loadingManager.js'
 
 const models = {
-    fox: { url: '../src/models/FoxModel/Fox.gltf' }
+    fox: { url: '../src/models/FoxModel/Fox.gltf', scale: { x: 0.2, y: 0.2, z: 0.2 } },
+    duck: { url: '../src/models/DuckModel/Duck.gltf', scale: { x: 8, y: 8, z: 8 } }
 }
 
 const gltfLoader = new GLTFLoader(loadingManager.manager)
