@@ -119,22 +119,22 @@ function resizeScreen(renderer) {
     camera.updateProjectionMatrix();
 }
 
-function resizeRendererToDisplaySize(renderer) {
+// function resizeRendererToDisplaySize(renderer) {
   
-  const canvas = renderer.domElement
-  const width = canvas.clientWidth
-  const height = canvas.clientHeight
-  const needResize = canvas.width !== width || canvas.height !== height
-  // console.log(width, canvas.width)
-  if (canvas.width !== canvas.clientWidth) {
-    console.log("NU!")
-  }
-  if (needResize) {
-    renderer.setSize(width, height, false)
-    console.log("Resized")
-  }
-  return needResize
-}
+//   const canvas = renderer.domElement
+//   const width = canvas.clientWidth
+//   const height = canvas.clientHeight
+//   const needResize = canvas.width !== width || canvas.height !== height
+//   // console.log(width, canvas.width)
+//   if (canvas.width !== canvas.clientWidth) {
+//     console.log("NU!")
+//   }
+//   if (needResize) {
+//     renderer.setSize(width, height, false)
+//     console.log("Resized")
+//   }
+//   return needResize
+// }
 
 
 window.onload = function () {
