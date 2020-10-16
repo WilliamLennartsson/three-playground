@@ -4,31 +4,29 @@ import { GLTFLoader } from '../dependencies/GLTFLoader.js'
 import { loadModels, prepModelsAndAnimations } from './loaders.js'
 import { spawnModel } from './spawners.js'
 import { createCube } from './cube.js'
-
+import mouseControls from './controls/mouseControls.js'
 
 const loadingElem = document.querySelector('#loading')
 
-let scene, camera, renderer, clock
+let scene, camera, renderer, clock, controls
 const cubes  = []
 const rows = 20
 const cols = 30
-let fox;
+let fox
 
-
-
-clock = new THREE.Clock()
 
 function init() {
     
-    loadingElem.style.display = 'none';
+    loadingElem.style.display = 'none'
     setUp()
+    controls = mouseControls(scene, camera)
     // loadFox()
     const models = prepModelsAndAnimations()
     fox = spawnModel(scene, models["fox"], 0, -20, 0)
     playNextAction(fox.mixerInfo)
     // playNextAction(fox.mixerInfo)
 
-    console.log('models :>> ', models);
+    console.log('models :>> ', models)
 
     // for (let i = 0; i < cols; i++) {
     //     for (let j = 0; j < rows; j++) {
@@ -62,6 +60,7 @@ const update = function () {
     // })
 
     // camera.position.z += 0.04
+    
 
     renderer.render(scene, camera);
 };
@@ -84,35 +83,42 @@ function playNextAction(mixerInfo) {
   }
 
 function setUp(){
+    clock = new THREE.Clock()
 // Scene setup
     scene = new THREE.Scene()
     scene.background = new THREE.Color(0x222222)
 
     // Camera setup
-    camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
-    camera.position.z = 20;
+    const fov = 45
+    const aspect = 2  // the canvas default
+    const near = 0.1
+    const far = 100
+    camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+    camera.position.set(0, 20, 40);
 
-    renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
-    // var light = new THREE.PointLight(0xff0000, 1, 100);
-    // light.position.set(0, 50, 0);
-    // scene.add(light);
-    var light = new THREE.DirectionalLight(0xfdfdfd, 2);
+    renderer = new THREE.WebGLRenderer()
+    renderer.setSize(window.innerWidth, window.innerHeight)
+    document.body.appendChild(renderer.domElement)
+    // var light = new THREE.PointLight(0xff0000, 1, 100)
+    // light.position.set(0, 50, 0)
+    // scene.add(light)
+    var light = new THREE.DirectionalLight(0xfdfdfd, 2)
     // you set the position of the light and it shines into the origin
-    light.position.set(2, 2, 1).normalize();
-    scene.add(light);
+    light.position.set(2, 2, 1).normalize()
+    scene.add(light)
 }
 
 function resizeRendererToDisplaySize(renderer) {
-    const canvas = renderer.domElement;
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    const needResize = canvas.width !== width || canvas.height !== height;
+    const canvas = renderer.domElement
+    const width = canvas.clientWidth
+    const height = canvas.clientHeight
+    const needResize = canvas.width !== width || canvas.height !== height
+    
     if (needResize) {
-      renderer.setSize(width, height, false);
+      renderer.setSize(width, height, false)
+      console.log("Resized")
     }
-    return needResize;
+    return needResize
   }
 
 
