@@ -3,35 +3,41 @@ import * as THREE from '../../../dependencies/three.module.js'
 import Component from './component.js'
 import SkinInstance from './skinInstance.js'
 
+const defaultProps = {
+  model: null,
+  keyboardInputManager: null,
+  moveSpeed: 20,
+  turnSpeed: 4,
+  runAnimation: null,
+  IdleAnimation: null
+}
+
 export default class Player extends Component {
-  constructor(gameObject, model, keyboardInputManager) {
+  constructor(gameObject, config) {
     super(gameObject);
+    const props = Object.assign(defaultProps, config)
+    props.model.gltf.scene.scale.set(props.model.scale.x, props.model.scale.y, props.model.scale.z)
 
-    model.gltf.scene.scale.set(model.scale.x, model.scale.y, model.scale.z)
-
-    this.skinInstance = gameObject.addComponent(SkinInstance, model);
+    this.skinInstance = gameObject.addComponent(SkinInstance, props.model);
     this.skinInstance.setAnimation('Run')
 
-    this.keyboardInputManager = keyboardInputManager
+    this.keyboardInputManager = props.keyboardInputManager
 
-    this.moveSpeed = 20
-    this.turnSpeed = this.moveSpeed / 4;
+    this.moveSpeed = props.moveSpeed
+    this.turnSpeed = props.turnSpeed
     this.forward = new THREE.Vector3(0, 0, 1)
-    console.log("Transform", gameObject.transform.translateOnAxis)
   }
 
   update(deltaTime) {
     // const {transform} = this.gameObject
     // // console.log(this.keyboardInputManager)
-    
-    const {left, right} = this.keyboardInputManager.keys
-    // console.log('left, right :>> ', left, right)
-    
+    const {left, right, up, down} = this.keyboardInputManager.keys
+
     const delta = (left.down  ?  1 : 0) +
-                  (right.down ? -1 : 0)
-    // this.gameObject.transform.rotation.y += 0.001 // this.turnSpeed * delta * deltaTime
-    // this.gameObject.transform.translateOnAxis(this.)
+                    (right.down ? -1 : 0)
+
     this.gameObject.transform.rotation.y += this.turnSpeed * delta * deltaTime;
     this.gameObject.transform.translateOnAxis(this.forward, this.moveSpeed * deltaTime)
+    
   }
 }
