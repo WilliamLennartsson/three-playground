@@ -2,6 +2,7 @@ import * as THREE from '../dependencies/three.module.js'
 import {SkeletonUtils} from '../dependencies/SkeletonUtils.js'
 
 
+// DEPRECATED (?)
 export function spawnModel(scene, model, x, y, z) {
     model.gltf.scene.scale.set(0.2, 0.2, 0.2 ) // scale here
     const clonedScene = SkeletonUtils.clone(model.gltf.scene)

@@ -48,11 +48,6 @@ function init() {
       duck.transform.position.z += j * 100
     }
   }
-
-  // console.log(ground)
-
-  // playNextAction(fox.mixerInfo)
-  // playNextAction(fox.mixerInfo)
   update();
 }
 
@@ -72,6 +67,7 @@ const update = function () {
   var rotZ = Math.cos(rotationAngle)
   var rotX = Math.sin(rotationAngle)
   var distance = 50;
+  // TODO: Camera class
   camera.position.x = player.transform.position.x - (distance * rotX);
   camera.position.y = player.transform.position.y + 20;
   camera.position.z = player.transform.position.z - (distance * rotZ);
