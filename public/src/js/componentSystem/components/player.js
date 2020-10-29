@@ -26,18 +26,28 @@ export default class Player extends Component {
     this.moveSpeed = props.moveSpeed
     this.turnSpeed = props.turnSpeed
     this.forward = new THREE.Vector3(0, 0, 1)
+
+    this.idle = false
   }
 
   update(deltaTime) {
     // const {transform} = this.gameObject
     // // console.log(this.keyboardInputManager)
-    const {left, right, up, down} = this.keyboardInputManager.keys
+    const { left, right, up, down } = this.keyboardInputManager.keys
 
-    const delta = (left.down  ?  1 : 0) +
-                    (right.down ? -1 : 0)
+    const delta = (left.down ? 1 : 0) +
+      (right.down ? -1 : 0)
+    if (down.justPressed && !this.idle) {
+      this.idle = true
+      this.skinInstance.setAnimation('Survey')
+    } else if (up.justPressed && this.idle) {
+      this.idle = false
+      this.skinInstance.setAnimation('Run')
+    }
 
+    if (!this.idle) {
+      this.gameObject.transform.translateOnAxis(this.forward, this.moveSpeed * deltaTime)
+    }
     this.gameObject.transform.rotation.y += this.turnSpeed * delta * deltaTime;
-    this.gameObject.transform.translateOnAxis(this.forward, this.moveSpeed * deltaTime)
-    
   }
 }
